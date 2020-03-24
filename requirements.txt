@@ -1,4 +1,5 @@
-ibis-framework
+ibis-framework[all]
 pidgy
 sqlalchemy
 pandas
+dask[complete]
