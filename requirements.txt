@@ -1,0 +1,4 @@
+ibis-framework
+pidgy
+sqlalchemy
+pandas
