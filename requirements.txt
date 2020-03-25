@@ -2,7 +2,7 @@ ibis-framework[develop]
 ibis-framework[mysql]
 ibis-framework[sqlite]
 ibis-framework[visualization]
-pidgy
+git+https://github.com/deathbeds/pidgy@edit
 sqlalchemy
 pandas
 dask[complete]
