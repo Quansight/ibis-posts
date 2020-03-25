@@ -1,4 +1,7 @@
-ibis-framework[all]
+ibis-framework[develop]
+ibis-framework[mysql]
+ibis-framework[sqlite]
+ibis-framework[visualization]
 pidgy
 sqlalchemy
 pandas
