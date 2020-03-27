@@ -1,7 +1,7 @@
-import nbconvert, pathlib
-def export(In, Out):
-        pathlib.Path(Out).write_text(F"""---\n\n---\n
+import nbconvert, pathlib, yaml
+def export(In, Out, **globals):
+        pathlib.Path(Out).write_text(F"""---\n{yaml.safe_dump(globals)}\n---\n
         {nbconvert.MarkdownExporter(exclude_input=True).from_filename(In)[0]}
         """);
 if __name__=='__main__':
-    export('ibis_posts/01.md.ipynb', '1.md')
+    export('ibis_posts/01.md.ipynb', '1.md', permalink="/expressions/")
