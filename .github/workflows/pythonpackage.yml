@@ -38,3 +38,4 @@ jobs:
       with:
         secret_token: ${{ secrets.PERSONAL_TOKEN }}
         publish_branch: nikola
+        publish_dir: ./docs
