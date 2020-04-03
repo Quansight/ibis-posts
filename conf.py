@@ -6,24 +6,13 @@ import time
 # !!  You should edit it to your liking.  !! #
 
 
-# ! Some settings can be different in different languages.
-# ! A comment stating (translatable) is used to denote those.
-# ! There are two ways to specify a translatable setting:
-# ! (a) BLOG_TITLE = "My Blog"
-# ! (b) BLOG_TITLE = {"en": "My Blog", "es": "Mi Blog"}
-# ! Option (a) is used when you don't want that setting translated.
-# ! Option (b) is used for settings that are different in different languages.
-
-
 # Data about this site
 BLOG_AUTHOR = "Quansight Labs"  # (translatable)
 BLOG_TITLE = "Ibis community posts sponsored by OmniSci"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
-SITE_URL = "https://example.com/"
-# This is the URL where Nikola's output will be deployed.
-# If not set, defaults to SITE_URL
-# BASE_URL = "https://example.com/"
+SITE_URL = "https://quansight.github.io/ibis-posts/"
+BASE_URL = "https://quansight.github.io/ibis-posts/"
 BLOG_EMAIL = "labs@quansight.com"
 BLOG_DESCRIPTION = "Ibis community posts sponsored by OmniSci"  # (translatable)
 
@@ -318,7 +307,7 @@ COMPILERS = {
 # "YAML": YAML wrapped in "---"
 # "TOML": TOML wrapped in "+++"
 # "Pelican": Native markdown metadata or reST docinfo fields. Nikola style for other formats.
-# METADATA_FORMAT = "Nikola"
+METADATA_FORMAT = "YAML"
 
 # Use date-based path when creating posts?
 # Can be enabled on a per-post basis with `nikola new_post -d`.
@@ -338,7 +327,7 @@ COMPILERS = {
 # Nikola supports logo display.  If you have one, you can put the URL here.
 # Final output is <img src="LOGO_URL" id="logo" alt="BLOG_TITLE">.
 # The URL may be relative to the site root.
-# LOGO_URL = ''
+LOGO_URL = 'https://repository-images.githubusercontent.com/249788228/efe63800-726f-11ea-92e4-f79a6d92eac7'
 
 # If you want to hide the title of your website (for example, if your logo
 # already contains the text), set this to False.
@@ -683,7 +672,7 @@ OUTPUT_FOLDER = 'docs'
 # FILTERS = {
 #    ".html": [filters.typogrify],
 #    ".js": [filters.closure_compiler],
-#    ".jpg": ["jpegoptim --strip-all -m75 -v %s"],
+#    ".jpg": ["jpegoptim --strip-all -m75 -v %s"],1
 # }
 
 # Executable for the "yui_compressor" filter (defaults to 'yui-compressor').
