@@ -1054,7 +1054,7 @@ PRETTY_URLS = True
 # IPYNB_CONFIG = {}
 # With the following example configuration you can use a custom jinja template
 # called `toggle.tpl` which has to be located in your site/blog main folder:
-IPYNB_CONFIG = {'Exporter': {'exclude_input': True}}
+IPYNB_CONFIG = {'Exporter': {'exclude_input': True, 'exclude_output_prompt': True}}
 
 # What Markdown extensions to enable?
 # You will also get gist, nikola and podcast because those are
