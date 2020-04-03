@@ -6,23 +6,23 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
-  <loc>https://example.com/</loc>
-  <lastmod>2020-04-03T01:35:00Z</lastmod>
+  <loc>https://quansight.github.io/ibis-posts/</loc>
+  <lastmod>2020-04-03T01:51:00Z</lastmod>
  </url>
  <url>
-  <loc>https://example.com/2020/</loc>
-  <lastmod>2020-04-03T01:35:00Z</lastmod>
+  <loc>https://quansight.github.io/ibis-posts/2020/</loc>
+  <lastmod>2020-04-03T01:51:00Z</lastmod>
  </url>
  <url>
-  <loc>https://example.com/archive.html</loc>
-  <lastmod>2020-04-03T01:35:00Z</lastmod>
+  <loc>https://quansight.github.io/ibis-posts/archive.html</loc>
+  <lastmod>2020-04-03T01:51:00Z</lastmod>
  </url>
  <url>
-  <loc>https://example.com/categories/</loc>
-  <lastmod>2020-04-03T01:35:00Z</lastmod>
+  <loc>https://quansight.github.io/ibis-posts/categories/</loc>
+  <lastmod>2020-04-03T01:51:00Z</lastmod>
  </url>
  <url>
-  <loc>https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</loc>
-  <lastmod>2020-04-03T01:35:00Z</lastmod>
+  <loc>https://quansight.github.io/ibis-posts/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</loc>
+  <lastmod>2020-04-03T01:51:00Z</lastmod>
  </url>
 </urlset>
