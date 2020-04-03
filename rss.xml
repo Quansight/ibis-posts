@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ibis community posts sponsored by OmniSci</title><link>https://example.com/</link><description>Ibis community posts sponsored by OmniSci</description><atom:link href="https://example.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:labs@quansight.com"&gt;Quansight Labs&lt;/a&gt; </copyright><lastBuildDate>Thu, 02 Apr 2020 16:46:20 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>ibis - an idiomatic flavor of SQL for Python programmers.</title><link>https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;div&gt;&lt;div class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
-&lt;/div&gt;&lt;div class="inner_cell"&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-
-&lt;pre&gt;&lt;code&gt;import ibis&lt;/code&gt;&lt;/pre&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ibis community posts sponsored by OmniSci</title><link>https://example.com/</link><description>Ibis community posts sponsored by OmniSci</description><atom:link href="https://example.com/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:labs@quansight.com"&gt;Quansight Labs&lt;/a&gt; </copyright><lastBuildDate>Fri, 03 Apr 2020 01:35:17 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>ibis - an idiomatic flavor of SQL for Python programmers.</title><link>https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;div&gt;&lt;div class="cell border-box-sizing code_cell rendered"&gt;
 
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;a href="https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/"&gt;Read more…&lt;/a&gt; (7 min remaining to read)&lt;/p&gt;&lt;/div&gt;</description><guid>https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</guid><pubDate>Thu, 02 Apr 2020 14:28:29 GMT</pubDate></item></channel></rss>
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+
+&lt;div class="output_area"&gt;
+
+    &lt;div class="prompt"&gt;&lt;/div&gt;
+
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+
+&lt;pre&gt;&lt;code&gt;import ibis
+
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="https://www.ibis-project.org/"&gt;&lt;code&gt;ibis&lt;/code&gt;&lt;/a&gt; is an alternative approach using databases that relies &lt;a href="https://en.wikipedia.org/wiki/Python_(programming_language)"&gt;Python&lt;/a&gt; rather than &lt;a href="https://en.wikipedia.org/wiki/SQL"&gt;SQL&lt;/a&gt; experience.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/"&gt;Read more…&lt;/a&gt; (7 min remaining to read)&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</description><guid>https://example.com/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</guid><pubDate>Thu, 02 Apr 2020 14:28:29 GMT</pubDate></item></channel></rss>
