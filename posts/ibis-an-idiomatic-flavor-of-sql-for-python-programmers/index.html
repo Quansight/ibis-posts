@@ -247,9 +247,8 @@ These features provide authors the ability to:</p>
 <ol>
 <li>Write backend independent <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions in <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a>.</li>
 <li>Access different database connections (eg. <a href="https://www.sqlite.org/index.html">sqlite</a>, <a href="https://www.omnisci.com/">omnisci</a>, <a href="http://pandas.pydata.org/">pandas</a>).</li>
-<li>Visually confirm their SQL queries with [directed acyclic graphs (DAG)].</li>
+<li>Visually confirm their SQL queries with <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graphs (DAG)</a>.</li>
 </ol>
-<p>Y'all may consult the <a href="https://www.ibis-project.org/"><code>ibis</code></a> if you want to <a href="https://docs.ibis-project.org/design.html">learn more about the design</a>.</p>
 <p><a href="https://www.ibis-project.org/"><code>ibis</code></a> is an alternative approach using databases that relies <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> rather than <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> experience.
 Typically, folks would have to learn entirely new syntax,
 or a <a href="https://stackoverflow.com/questions/1326318/difference-between-different-types-of-sql">flavor of SQL</a>, to perform simple tasks.
@@ -284,7 +283,7 @@ We’ll demonstrate the features using <a href="https://www.sqlite.org/index.htm
 <pre><code>client = ibis.sqlite.connect('lahmansbaseballdb.sqlite')
 
 </code></pre>
-<p><br><code>client</code> is a connection to our <a href="http://www.seanlahman.com/baseball-archive/statistics/">⚾️ database</a>.</p>
+<p><br></p>
 <p>The <code>client</code> variable represents our connection to the database.
 The <a href="http://www.seanlahman.com/baseball-archive/statistics/">baseball database</a> has <strong>29</strong> tables, 
 which we can see by running the following code snippet:</p>
@@ -296,7 +295,7 @@ which we can see by running the following code snippet:</p>
 <hr>
 <blockquote>
 <blockquote>
-<p>It will be important to use the correct <code>ibis</code> client for the file type.</p>
+<p>It will be essential to use the correct <a href="https://www.ibis-project.org/"><code>ibis</code></a> <code>client</code> for the file types.</p>
 </blockquote>
 </blockquote>
 <hr>
@@ -435,7 +434,7 @@ which we can see by running the following code snippet:</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="Selecting-and-visualizing-tables.">Selecting and visualizing tables.<a class="anchor-link" href="#Selecting-and-visualizing-tables.">¶</a>
 </h3>
-<p>We can now create a data frame from ibis expressions similar to the example above.
+<p>We can now create a data frame from [ibis] expressions similar to the example above.
 To demonstrate some of [<code>ibis</code>][ibis]’s capabilities,
 we’ll discuss information in the <code>halloffame</code> and <code>appearances</code> tables.
 Let's create the tables now.</p>
@@ -444,8 +443,8 @@ Let's create the tables now.</p>
 
 </code></pre>
 <p><br>
-A useful feature of Ibis is its DAG representation of our SQL query using <code>graphviz</code>.
-<code>dask</code> users will be familiar with this feature.</p>
+A useful feature of Ibis is its [DAG] representation of our [SQL] query using [<code>graphviz</code>][graphviz].
+[<code>dask</code>][dask] users will be familiar with this feature.</p>
 <!--
 
     return image(halloffame, appearances)
@@ -468,7 +467,7 @@ sample = halloffame.head()
 'SELECT t0."ID", t0."playerID",...FROM base.halloffame AS t0...LIMIT ? OFFSET ?'
 
 </code></pre>
-<p>And we can execute the expression to return a <code>pandas.DataFrame</code>.</p>
+<p>And we can execute the expression to return a [tidy <code>pandas.DataFrame</code>][tidy data].</p>
 
 <pre><code>&gt;&gt;&gt; assert isinstance(sample.execute(), pandas.DataFrame)
 
@@ -502,8 +501,8 @@ sample.execute()</code></pre>
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="Filtering-and-selecting-data.">Filtering and selecting data.<a class="anchor-link" href="#Filtering-and-selecting-data.">¶</a>
 </h3>
-<p>ibis uses familiar pandas syntax to build SQL queries.
-Our first selection will filter the players from our data by applying the 
+<p><a href="https://www.ibis-project.org/">ibis</a> uses familiar <a href="http://pandas.pydata.org/">pandas</a> syntax to build <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> queries.
+Our first selection will <code>filter</code> the <code>players</code> from our data by applying the 
 predicate to the <code>halloffame</code> expression.</p>
 
 <pre><code>predicate = halloffame.category == 'Player'
@@ -549,8 +548,6 @@ players = halloffame[predicate]
 </h3>
 <p>A single view of the <code>halloffame</code> players and <code>appearances</code> requires us to join the two tables. 
 To do this, we’ll perform an inner join based on the <strong>playerID</strong> column.</p>
-<p>A single view  players and <code>appearances</code> requires joining the
-two tables. We'll perform an inner join based on the playerID column.</p>
 
 <pre><code>predicate = players.playerID == appearances.playerID
 
@@ -568,9 +565,10 @@ Then we will compose the join.</p>
 <pre><code>unmaterialized = players.join(appearances[columns], predicate)
 
 </code></pre>
-<p>The table is not materialized or held in memory yet.  This is a SQL thing, 
-in Python we add the materialize method.</p>
-
+<hr>
+<p>Joins require a <a href="https://en.wikipedia.org/wiki/Materialized_view">materialized view</a> to proceed with using and applying.
+With <code>ibis</code> this is just details because we can use the <strong>materialize</strong> METHOD.</p>
+<hr>
 <pre><code>join = unmaterialized.materialize()
 
 with pytest.raises(ibis.IbisError): unmaterialized.distinct()
@@ -578,7 +576,7 @@ with pytest.raises(ibis.IbisError): unmaterialized.distinct()
 join = join.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
 
 </code></pre>
-<p>A sample of the joined data.</p>
+<p>Below is a sample of our joined data.</p>
 <table border="1" class="dataframe">
 <thead><tr style="text-align: right;">
 <th></th>
@@ -810,7 +808,7 @@ join = join.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
 
 <div class="output_markdown rendered_html output_subarea ">
 <hr>
-<p><code>ibis</code> supports multiple join strategies.</p>
+<p>[<code>ibis</code>][ibis] supports other join strategies.</p>
 
 <pre><code>&gt;&gt;&gt; [x for x in dir(players) if 'join' in x]
 ['anti_join', 'any_inner_join', 'any_left_join', 'asof_join', 'cross_join', 'inner_join', 'join', 'left_join', 'outer_join', 'semi_join']
@@ -1179,15 +1177,21 @@ join = join.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
 </table>
 <h3 id="How-many-pitchers-have-been-inducted-into-the-hall-of-fame?">How many pitchers have been inducted into the hall of fame?<a class="anchor-link" href="#How-many-pitchers-have-been-inducted-into-the-hall-of-fame?">¶</a>
 </h3>
-<p>Some hitters may have pitched so we'll filter out those appearances.</p>
+<p>Some hitters may have also pitched, so we’ll need to filter out those appearances.</p>
 
 <pre><code>pitchers = join[join.G_p &gt; 100]
 
-predicate = [pitchers.inducted, pitchers.yearID]
-inducted_pitchers = pitchers.groupby(predicate).count()
+</code></pre>
+<p>Group the <code>pitchers</code> based on a predicate.</p>
 
-df = inducted_pitchers.execute().set_index('inducted yearID'.split())
+<pre><code>predicate = [pitchers.inducted, pitchers.yearID]
 
+</code></pre>
+<p>And count them annually.</p>
+
+<pre><code>grouped_pitchers = pitchers.groupby(predicate).count()
+
+df = grouped_pitchers.execute().set_index('inducted yearID'.split())
 
 
 </code></pre>
@@ -1225,7 +1229,7 @@ df = inducted_pitchers.execute().set_index('inducted yearID'.split())
 <h3 id="What-next?">What next?<a class="anchor-link" href="#What-next?">¶</a>
 </h3>
 <p>In future posts, we’ll explore more backends and visualizing ibis objects.
-If you’d like to contribute to ibis, please take a look at OpenTeams or the ibis contributing guide.</p>
+If you’d like to contribute to ibis, please take a look at <a href="https://openteams.com/">OpenTeams</a> or the <a href="https://docs.ibis-project.org/contributing.html">ibis contributing guide</a>.</p>
 
 </div>
 
