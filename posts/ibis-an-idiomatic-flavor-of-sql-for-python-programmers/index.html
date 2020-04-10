@@ -79,8 +79,8 @@ import ibis, pandas, dask, pytest, base64
 
 
 
-ibis is mature open source project that has been in development for ~5
-years with 134">
+ibis is a mature open source project that has been in development for ~5
+years with 1">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2020-04-02T10:28:29-04:00">
 </head>
@@ -239,25 +239,27 @@ years with 134">
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<p><a href="https://www.ibis-project.org/"><code>ibis</code></a> is mature open source project that has been in development for <strong>~5</strong>
-years with <strong>1345</strong> ⭐️gazers.
+<p><a href="https://www.ibis-project.org/"><code>ibis</code></a> is a mature open source project that has been in development for <strong>~5</strong>
+years with <strong>1349</strong> ⭐️ on Github.
 It provides an interface to SQL for <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> programmers and 
 bridges the gap between remote storage &amp; execution systems.
 These features provide authors the ability to:</p>
 <ol>
-<li>Write backend independent <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions in <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a>.</li>
-<li>Access different database connections (eg. <a href="https://www.sqlite.org/index.html">sqlite</a>, <a href="https://www.omnisci.com/">omnisci</a>, <a href="http://pandas.pydata.org/">pandas</a>).</li>
-<li>Visually confirm their SQL queries with <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graphs (DAG)</a>.</li>
+<li>Write backend independent <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions in <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a>
+</li>
+<li>Access different database connections (eg. <a href="https://www.sqlite.org/index.html">sqlite</a>, <a href="https://www.omnisci.com/">omnisci</a>, <a href="http://pandas.pydata.org/">pandas</a>)</li>
+<li>Visually confirm their SQL queries with <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graphs (DAG)</a>
+</li>
 </ol>
-<p><a href="https://www.ibis-project.org/"><code>ibis</code></a> is an alternative approach using databases that relies <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> rather than <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> experience.
-Typically, folks would have to learn entirely new syntax,
-or a <a href="https://stackoverflow.com/questions/1326318/difference-between-different-types-of-sql">flavor of SQL</a>, to perform simple tasks.
-Now, those with Python abilities can avoid a steep learning curve
-by using <a href="https://www.ibis-project.org/"><code>ibis</code></a> for composing and executing expressions in <a href="https://en.wikipedia.org/wiki/SQL">SQL</a>
-using familiar syntaxes like <a href="http://pandas.pydata.org/"><code>pandas</code></a> and <a href="https://dask.org/"><code>dask</code></a>. 
-<a href="https://www.ibis-project.org/"><code>ibis</code></a> also assists in forming <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions by providing visual feedback about each <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> object.</p>
-<p>This blog focuses on <strong>writing <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions in <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a></strong> and how to compose queries using <a href="https://www.ibis-project.org/"><code>ibis</code></a> visually.
-We’ll demonstrate the features using <a href="https://www.sqlite.org/index.html">SQLite</a> and <a href="http://www.seanlahman.com/baseball-archive/statistics/">Sean Lahman’s baseball database</a>.</p>
+<p><a href="https://www.ibis-project.org/"><code>ibis</code></a> is an alternative approach using databases that relies on <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> rather than <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> experience.
+Typically, people would have to learn an entirely new syntax,
+or <a href="https://stackoverflow.com/questions/1326318/difference-between-different-types-of-sql">flavor of SQL</a>, to perform simple tasks.
+Now, those with Python abilities can avoid a new learning curve
+by using <a href="https://www.ibis-project.org/"><code>ibis</code></a> for composing and executing expressions in <a href="https://en.wikipedia.org/wiki/SQL">SQL</a>.
+Using familiar <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> syntaxes similar to <a href="http://pandas.pydata.org/"><code>pandas</code></a> and <a href="https://dask.org/"><code>dask</code></a>. 
+<a href="https://www.ibis-project.org/"><code>ibis</code></a> assists in formation of <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions by providing visual feedback about each <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> object.</p>
+<p>This blog focuses on writing <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> expressions in <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> and how to compose queries visually using <a href="https://www.ibis-project.org/"><code>ibis</code></a>.
+We'll demonstrate this by using <a href="https://www.sqlite.org/index.html">SQLite</a> and <a href="http://www.seanlahman.com/baseball-archive/statistics/">Sean Lahman’s baseball database</a>.</p>
 
 </div>
 
@@ -278,15 +280,16 @@ We’ll demonstrate the features using <a href="https://www.sqlite.org/index.htm
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="Connecting-to-a-database.">Connecting to a database.<a class="anchor-link" href="#Connecting-to-a-database.">¶</a>
 </h3>
-<p>Getting started, we’ll need to establish a <a href="https://en.wikipedia.org/wiki/Database_connection">database connection</a>. <a href="https://www.ibis-project.org/"><code>ibis</code></a> makes it easy to create different connections.</p>
+<p>To get started, we’ll need to establish a <a href="https://en.wikipedia.org/wiki/Database_connection">database connection</a>. <a href="https://www.ibis-project.org/"><code>ibis</code></a> makes it easy to create different connections.
+Let's go ahead and do this now.</p>
 
 <pre><code>client = ibis.sqlite.connect('lahmansbaseballdb.sqlite')
 
 </code></pre>
 <p><br></p>
-<p>The <code>client</code> variable represents our connection to the database.
-The <a href="http://www.seanlahman.com/baseball-archive/statistics/">baseball database</a> has <strong>29</strong> tables, 
-which we can see by running the following code snippet:</p>
+<p>The <code>client</code> variable above represents our connection to the database.
+The <a href="http://www.seanlahman.com/baseball-archive/statistics/">baseball database</a> we are using has <strong>29</strong> tables, 
+which we can see by running the following code:</p>
 
 <pre><code>&gt;&gt;&gt; client.list_tables()
 [...'appearances'...'halloffame', 'homegames', 'leagues', 'managers',...]
@@ -295,7 +298,7 @@ which we can see by running the following code snippet:</p>
 <hr>
 <blockquote>
 <blockquote>
-<p>It will be essential to use the correct <a href="https://www.ibis-project.org/"><code>ibis</code></a> <code>client</code> for the file types.</p>
+<p>It is essential to use the correct <a href="https://www.ibis-project.org/"><code>ibis</code></a> <code>client</code> for the file types being used.</p>
 </blockquote>
 </blockquote>
 <hr>
@@ -434,17 +437,17 @@ which we can see by running the following code snippet:</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="Selecting-and-visualizing-tables.">Selecting and visualizing tables.<a class="anchor-link" href="#Selecting-and-visualizing-tables.">¶</a>
 </h3>
-<p>We can now create a data frame from [ibis] expressions similar to the example above.
-To demonstrate some of [<code>ibis</code>][ibis]’s capabilities,
-we’ll discuss information in the <code>halloffame</code> and <code>appearances</code> tables.
-Let's create the tables now.</p>
+<p>Now that we have a connection we can create a data frame from <a href="https://www.ibis-project.org/">ibis</a> expressions similar to the example above.
+To demonstrate some of <a href="https://www.ibis-project.org/"><code>ibis</code></a> capabilities,
+we’ll examine information in the <code>halloffame</code> and <code>appearances</code> tables of the database.
+Let's create those tables now.</p>
 
 <pre><code>halloffame, appearances = client.table('halloffame'), client.table('appearances')
 
 </code></pre>
 <p><br>
-A useful feature of Ibis is its [DAG] representation of our [SQL] query using [<code>graphviz</code>][graphviz].
-[<code>dask</code>][dask] users will be familiar with this feature.</p>
+A useful feature of <a href="https://www.ibis-project.org/">ibis</a> is its ability to representat of our <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> query in a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> using <a href="https://graphviz.org"><code>graphviz</code></a>.
+<a href="https://dask.org/"><code>dask</code></a> users will be familiar with this helpful feature.</p>
 <!--
 
     return image(halloffame, appearances)
@@ -452,26 +455,28 @@ A useful feature of Ibis is its [DAG] representation of our [SQL] query using [<
 -->
 
 
-<p>At the moment, the table doesn’t hold any data;
-instead, it’s an expression used to manipulate data in the SQLite database.
-We can assert this as follows:</p>
+<p>At the moment, our table doesn’t hold any data;
+instead, they are expressions represent operations applied to the data where its located - in the SQLite database.
+We can prove this by asserting its instance like this:</p>
 
 <pre><code>&gt;&gt;&gt; assert isinstance(halloffame, ibis.expr.types.TableExpr)
 
 sample = halloffame.head()
 
 </code></pre>
-<p>Looking at a <code>sample</code> expression we can reveal the SQL query we constructed.</p>
+<p>Looking at the <code>sample</code> expression we can reveal the SQL query we constructed.</p>
 
 <pre><code>&gt;&gt;&gt; str(sample.compile())
 'SELECT t0."ID", t0."playerID",...FROM base.halloffame AS t0...LIMIT ? OFFSET ?'
 
 </code></pre>
-<p>And we can execute the expression to return a [tidy <code>pandas.DataFrame</code>][tidy data].</p>
+<p>And we can now execute the expression to return a <a href="https://vita.had.co.nz/papers/tidy-data.pdf">tidy <code>pandas.DataFrame</code></a>.</p>
 
 <pre><code>&gt;&gt;&gt; assert isinstance(sample.execute(), pandas.DataFrame)
 
-sample.execute()</code></pre>
+</code></pre>
+
+<pre><code>sample.execute()</code></pre>
 
 </div>
 
@@ -501,12 +506,12 @@ sample.execute()</code></pre>
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="Filtering-and-selecting-data.">Filtering and selecting data.<a class="anchor-link" href="#Filtering-and-selecting-data.">¶</a>
 </h3>
-<p><a href="https://www.ibis-project.org/">ibis</a> uses familiar <a href="http://pandas.pydata.org/">pandas</a> syntax to build <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> queries.
-Our first selection will <code>filter</code> the <code>players</code> from our data by applying the 
-predicate to the <code>halloffame</code> expression.</p>
+<p>As mentioned earlier, <a href="https://www.ibis-project.org/">ibis</a> uses familiar <a href="http://pandas.pydata.org/">pandas</a> syntax to build <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> queries.
+Tho show how to filter and select data we will <code>filter</code> the <code>players</code> from our <code>halloffame</code> table by applying
+our boolean logic to the <code>halloffame</code> expression.</p>
 
-<pre><code>predicate = halloffame.category == 'Player'
-players = halloffame[predicate]
+<pre><code>condition = halloffame.category == 'Player'
+players = halloffame[condition]
 
 </code></pre>
 <!--
@@ -546,37 +551,44 @@ players = halloffame[predicate]
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="Joining-ibis-tables.">Joining <a href="https://www.ibis-project.org/"><code>ibis</code></a> tables.<a class="anchor-link" href="#Joining-ibis-tables.">¶</a>
 </h3>
-<p>A single view of the <code>halloffame</code> players and <code>appearances</code> requires us to join the two tables. 
-To do this, we’ll perform an inner join based on the <strong>playerID</strong> column.</p>
+<p>If we want a single view of the <code>halloffame</code> players and their <code>appearances</code>,
+we need to join the two tables. 
+To do this, we’ll perform an inner join based on the <strong>playerID</strong>
+column in our new <code>players</code> table.</p>
 
-<pre><code>predicate = players.playerID == appearances.playerID
-
-</code></pre>
-<p>These tables share columns, but SQL doesn't handle overlapping columns very well.
-To resolve this potential conflict, we will iterate over the 
-columns in the appearances table and select on the columns not in the players table.
-Then we will compose the join.</p>
-
-<pre><code>columns = [x for x in appearances.columns if x not in {'playerID', 'ID'}]
+<pre><code>condition = players.playerID == appearances.playerID
 
 </code></pre>
-<p>Composing the join.</p>
+<p>The <code>players</code> and <code>appearances</code> tables share columns, but SQL doesn't handle overlapping columns very well.
+Specifically in our data <code>('playerID' and 'ID')</code> are in both tables, we will filter the 
+columns from the <code>appearances</code> table, because they appear in the <code>players</code> table.
+Then we will compose the join. We do this by using a Python list comprehension.</p>
 
-<pre><code>unmaterialized = players.join(appearances[columns], predicate)
+<pre><code>columns = [x for x in appearances.columns if x not in ('playerID', 'ID')]
 
 </code></pre>
+<p>Now to compose the join.</p>
+
+<pre><code>unmaterialized = players.join(appearances[columns], condition)
+
+
+</code></pre>
+<h5 id="Materializing-the-join">
+<a href="https://en.wikipedia.org/wiki/Materialized_view">Materializing</a> the <code>join</code><a class="anchor-link" href="#Materializing-the-join">¶</a>
+</h5>
 <hr>
 <p>Joins, in databases, require a <a href="https://en.wikipedia.org/wiki/Materialized_view">materialized view</a> to proceed with building expressions.
-With <code>ibis</code> this is just details because we can use the <strong>materialize</strong> METHOD.</p>
-<hr>
-<pre><code>join = unmaterialized.materialize()
+Just remember to use the expressions <strong>materialize</strong> method otherwise
+<code>ibis</code> will throw an error; demonstrated by the test below.</p>
 
-with pytest.raises(ibis.IbisError): unmaterialized.distinct()
-
-join = join.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
+<pre><code>&gt;&gt;&gt; with pytest.raises(ibis.IbisError): unmaterialized.distinct()
 
 </code></pre>
-<p>Below is a sample of our joined data.</p>
+<hr>
+<pre><code>join = unmaterialized.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
+
+</code></pre>
+<p>The code above completes the <code>join</code>, and a sample of our joined data is shared in the table below.</p>
 <table border="1" class="dataframe">
 <thead><tr style="text-align: right;">
 <th></th>
@@ -808,13 +820,37 @@ join = join.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
 
 <div class="output_markdown rendered_html output_subarea ">
 <hr>
-<p>[<code>ibis</code>][ibis] supports other join strategies.</p>
+<p><a href="https://www.ibis-project.org/"><code>ibis</code></a> supports other join strategies as well. Those are listed below:</p>
 
 <pre><code>&gt;&gt;&gt; [x for x in dir(players) if 'join' in x]
 ['anti_join', 'any_inner_join', 'any_left_join', 'asof_join', 'cross_join', 'inner_join', 'join', 'left_join', 'outer_join', 'semi_join']
 
 </code></pre>
 <hr>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="Executing-an-expression">Executing an expression<a class="anchor-link" href="#Executing-an-expression">¶</a>
+</h3>
+<p>In this section, we'll expand the join in a <code>pandas.DataFrame</code>. We'll answer the question:</p>
+<blockquote>
+<p><strong>How many pitchers have been inducted into the hall of fame?</strong></p>
+</blockquote>
+
 </div>
 
 </div>
@@ -1175,21 +1211,21 @@ join = join.materialize().distinct()  # like 🐼.DataFrame.drop_duplicates
     </tr>
 </tbody>
 </table>
-<h3 id="How-many-pitchers-have-been-inducted-into-the-hall-of-fame?">How many pitchers have been inducted into the hall of fame?<a class="anchor-link" href="#How-many-pitchers-have-been-inducted-into-the-hall-of-fame?">¶</a>
-</h3>
-<p>Some hitters may have also pitched, so we’ll need to filter out those appearances.</p>
+<p>Some hitters may have also pitched, so we’ll need to filter out those appearances. 
+<code>join.G_p</code> represents the numbers of games a player played as a pitcher and we select
+players who played mostly as pitchers, or pitched more than 100 games.</p>
 
 <pre><code>pitchers = join[join.G_p &gt; 100]
 
 </code></pre>
-<p>Group the <code>pitchers</code> based on a predicate.</p>
+<p>Group the <code>pitchers</code> based on a <code>condition</code>.</p>
 
-<pre><code>predicate = [pitchers.inducted, pitchers.yearID]
+<pre><code>condition = [pitchers.inducted, pitchers.yearID]
 
 </code></pre>
 <p>And count them annually.</p>
 
-<pre><code>grouped_pitchers = pitchers.groupby(predicate).count()
+<pre><code>grouped_pitchers = pitchers.groupby(condition).count()
 
 df = grouped_pitchers.execute().set_index('inducted yearID'.split())
 
@@ -1228,7 +1264,7 @@ df = grouped_pitchers.execute().set_index('inducted yearID'.split())
 <div class="output_markdown rendered_html output_subarea ">
 <h3 id="What-next?">What next?<a class="anchor-link" href="#What-next?">¶</a>
 </h3>
-<p>In future posts, we’ll explore more backends and visualizing ibis objects.
+<p>That's it! In future posts, we’ll explore more backends and visualize more ibis objects.
 If you’d like to contribute to ibis, please take a look at <a href="https://openteams.com/">OpenTeams</a> or the <a href="https://docs.ibis-project.org/contributing.html">ibis contributing guide</a>.</p>
 
 </div>
