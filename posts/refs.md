@@ -1,6 +1,7 @@
 ---
 date: 2020-04-03 12:23:13 UTC-04:00
 ---
+    __doc__=\
 [ibis]: https://www.ibis-project.org/
 [SQL]: https://en.wikipedia.org/wiki/SQL
 [Python]: https://en.wikipedia.org/wiki/Python_(programming_language)
