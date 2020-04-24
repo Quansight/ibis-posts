@@ -1,5 +1,2731 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ibis community posts sponsored by OmniSci</title><link>https://quansight.github.io/ibis-posts/</link><description>Ibis community posts sponsored by OmniSci</description><atom:link href="https://quansight.github.io/ibis-posts/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:labs@quansight.com"&gt;Quansight Labs&lt;/a&gt; </copyright><lastBuildDate>Fri, 10 Apr 2020 14:45:48 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>ibis - an idiomatic flavor of SQL for Python programmers.</title><link>https://quansight.github.io/ibis-posts/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;div&gt;&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ibis community posts sponsored by OmniSci</title><link>https://quansight.github.io/ibis-posts/</link><description>Ibis community posts sponsored by OmniSci</description><atom:link href="https://quansight.github.io/ibis-posts/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2020 &lt;a href="mailto:labs@quansight.com"&gt;Quansight Labs&lt;/a&gt; </copyright><lastBuildDate>Fri, 24 Apr 2020 16:12:52 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Analysis of ibis issues.</title><link>https://quansight.github.io/ibis-posts/posts/scrape-issues/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;div&gt;&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;This document explores the project management of issues in the &lt;code&gt;ibis&lt;/code&gt; project. It produces a csv that 
+can be used in &lt;code&gt;"annual_tags.csv"&lt;/code&gt;.&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+
+&lt;pre&gt;&lt;code&gt;import ibis, pandas; from poser import *&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;Cache the results after we grab them to improve reuse. &lt;em&gt;Delete the cache file to reset cache.&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;λ['requests_cache.install_cache']('issues')&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;We'll only concern ourselves with some backends specifically.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;backends =\
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;omnisci spark   postgres    bigquery    pandas  sqlite  impala  kudu    geospatial  clickhouse  mysql   sqlalchemy&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+
+&lt;pre&gt;&lt;code&gt;get_issues: (
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Paginated request for the &lt;code&gt;ibis&lt;/code&gt; issues.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;) = (
+    λ
+    ['https://api.github.com/repos/ibis-project/ibis/issues?page={}&amp;amp;state=all'.format]
+    .partial('requests.get', params=dict(access_token=__import__('os').environ['ACCESS_TOKEN']))
+    [Λ.json()]
+)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+
+&lt;pre&gt;&lt;code&gt;i, last = 0, range(30)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Iterate through the issues. The Github API returns 30 results if there are more results on another page.
+This look is loading the list of issues and caching them.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;while len(last) == 30:
+    i +=1
+    last = get_issues(i)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;Tidy the issues into a dataframe.&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;The issue data returned from Github&lt;/summary&gt;
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;id&lt;/th&gt;
+      &lt;th&gt;605865017&lt;/th&gt;
+      &lt;th&gt;605864409&lt;/th&gt;
+      &lt;th&gt;605456457&lt;/th&gt;
+      &lt;th&gt;605156532&lt;/th&gt;
+      &lt;th&gt;605153217&lt;/th&gt;
+      &lt;th&gt;605013516&lt;/th&gt;
+      &lt;th&gt;604931573&lt;/th&gt;
+      &lt;th&gt;604318267&lt;/th&gt;
+      &lt;th&gt;603230786&lt;/th&gt;
+      &lt;th&gt;603156074&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;69922370&lt;/th&gt;
+      &lt;th&gt;69922366&lt;/th&gt;
+      &lt;th&gt;69922363&lt;/th&gt;
+      &lt;th&gt;69922358&lt;/th&gt;
+      &lt;th&gt;69922355&lt;/th&gt;
+      &lt;th&gt;69922353&lt;/th&gt;
+      &lt;th&gt;69922347&lt;/th&gt;
+      &lt;th&gt;69922344&lt;/th&gt;
+      &lt;th&gt;69922336&lt;/th&gt;
+      &lt;th&gt;69922332&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;url&lt;/th&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;repository_url&lt;/th&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;labels_url&lt;/th&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;comments_url&lt;/th&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;events_url&lt;/th&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+      &lt;td&gt;https://api.github.com/repos/ibis-project/ibis...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;html_url&lt;/th&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2196&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2195&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2194&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2193&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/2192&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/2191&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2190&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2189&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/2188&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/pull/2187&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/15&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/14&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/13&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/12&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/11&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/10&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/9&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/8&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/7&lt;/td&gt;
+      &lt;td&gt;https://github.com/ibis-project/ibis/issues/6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;node_id&lt;/th&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA4MTkxMDQw&lt;/td&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA4MTkwNTIx&lt;/td&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA3ODU0MjE0&lt;/td&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA3NjE0OTg4&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2MDUxNTMyMTc=&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2MDUwMTM1MTY=&lt;/td&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA3NDMwODIz&lt;/td&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA2OTM1MTgz&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2MDMyMzA3ODY=&lt;/td&gt;
+      &lt;td&gt;MDExOlB1bGxSZXF1ZXN0NDA1OTk3MzUw&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM3MA==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM2Ng==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM2Mw==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM1OA==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM1NQ==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM1Mw==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM0Nw==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjM0NA==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjMzNg==&lt;/td&gt;
+      &lt;td&gt;MDU6SXNzdWU2OTkyMjMzMg==&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;number&lt;/th&gt;
+      &lt;td&gt;2196&lt;/td&gt;
+      &lt;td&gt;2195&lt;/td&gt;
+      &lt;td&gt;2194&lt;/td&gt;
+      &lt;td&gt;2193&lt;/td&gt;
+      &lt;td&gt;2192&lt;/td&gt;
+      &lt;td&gt;2191&lt;/td&gt;
+      &lt;td&gt;2190&lt;/td&gt;
+      &lt;td&gt;2189&lt;/td&gt;
+      &lt;td&gt;2188&lt;/td&gt;
+      &lt;td&gt;2187&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;14&lt;/td&gt;
+      &lt;td&gt;13&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;11&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;title&lt;/th&gt;
+      &lt;td&gt;CI: Removing backends from docs build to fix d...&lt;/td&gt;
+      &lt;td&gt;Fix CondaBuild CI job&lt;/td&gt;
+      &lt;td&gt;CI: Split tests in two groups by backend&lt;/td&gt;
+      &lt;td&gt;CI: Speeding up conda solver time by removing ...&lt;/td&gt;
+      &lt;td&gt;CI: Unpin arrow builds&lt;/td&gt;
+      &lt;td&gt;Access to Twitter account&lt;/td&gt;
+      &lt;td&gt;CI: Testing if previous arrow builds fix arrow...&lt;/td&gt;
+      &lt;td&gt;CI: Trying to find a point where the disk spac...&lt;/td&gt;
+      &lt;td&gt;FEAT: Create rule for tuples&lt;/td&gt;
+      &lt;td&gt;FIX: fix regexp expression at 'test_string'&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;Method for user to indicate format of data to ...&lt;/td&gt;
+      &lt;td&gt;Ibis UDA persistence in Impala&lt;/td&gt;
+      &lt;td&gt;Consider (and benchmark) IPC alternative to se...&lt;/td&gt;
+      &lt;td&gt;Semaphore array management and cleanup in prod...&lt;/td&gt;
+      &lt;td&gt;Enable configurable row batchsize for passing ...&lt;/td&gt;
+      &lt;td&gt;Create user API for specifying tabular data to...&lt;/td&gt;
+      &lt;td&gt;[CLOSED] Cherry pick to cdh5-trunk&lt;/td&gt;
+      &lt;td&gt;Impala Code Style&lt;/td&gt;
+      &lt;td&gt;ibis.server doesn't close when Impala killed&lt;/td&gt;
+      &lt;td&gt;Maintaining aggregation state between task calls&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;user&lt;/th&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'xmnlab', 'id': 5209757, 'node_id': ...&lt;/td&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'datapythonista', 'id': 10058240, 'n...&lt;/td&gt;
+      &lt;td&gt;{'login': 'emilyreff7', 'id': 50638962, 'node_...&lt;/td&gt;
+      &lt;td&gt;{'login': 'dchigarev', 'id': 62142979, 'node_i...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+      &lt;td&gt;{'login': 'wesm', 'id': 329591, 'node_id': 'MD...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;labels&lt;/th&gt;
+      &lt;td&gt;[{'id': 623935379, 'node_id': 'MDU6TGFiZWw2MjM...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[{'id': 623935379, 'node_id': 'MDU6TGFiZWw2MjM...&lt;/td&gt;
+      &lt;td&gt;[{'id': 623935379, 'node_id': 'MDU6TGFiZWw2MjM...&lt;/td&gt;
+      &lt;td&gt;[{'id': 623935379, 'node_id': 'MDU6TGFiZWw2MjM...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[{'id': 623935379, 'node_id': 'MDU6TGFiZWw2MjM...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;[{'id': 200986080, 'node_id': 'MDU6TGFiZWwyMDA...&lt;/td&gt;
+      &lt;td&gt;[{'id': 200986080, 'node_id': 'MDU6TGFiZWwyMDA...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[{'id': 200986080, 'node_id': 'MDU6TGFiZWwyMDA...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[{'id': 200986080, 'node_id': 'MDU6TGFiZWwyMDA...&lt;/td&gt;
+      &lt;td&gt;[{'id': 200986080, 'node_id': 'MDU6TGFiZWwyMDA...&lt;/td&gt;
+      &lt;td&gt;[{'id': 200986078, 'node_id': 'MDU6TGFiZWwyMDA...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;state&lt;/th&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;open&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+      &lt;td&gt;closed&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;locked&lt;/th&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;assignee&lt;/th&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;assignees&lt;/th&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+      &lt;td&gt;[]&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;milestone&lt;/th&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+      &lt;td&gt;None&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;comments&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;created_at&lt;/th&gt;
+      &lt;td&gt;2020-04-23 20:54:44+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 20:53:50+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 11:28:14+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 00:29:55+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 00:18:57+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-22 19:36:09+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-22 17:26:16+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-21 22:12:13+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-20 13:17:09+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-20 11:14:57+00:00&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:29+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:28+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:28+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:27+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:27+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:26+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:25+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:25+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:24+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:49:23+00:00&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;updated_at&lt;/th&gt;
+      &lt;td&gt;2020-04-24 00:42:19+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 23:01:30+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-24 01:25:57+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 19:46:48+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 00:19:18+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-22 19:36:09+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-22 23:59:50+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 19:52:11+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-20 13:17:09+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-24 06:59:35+00:00&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:38:48+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:37:05+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:35:26+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:35:45+00:00&lt;/td&gt;
+      &lt;td&gt;2018-01-29 18:47:11+00:00&lt;/td&gt;
+      &lt;td&gt;2015-05-25 23:10:12+00:00&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:52:55+00:00&lt;/td&gt;
+      &lt;td&gt;2015-10-07 00:27:27+00:00&lt;/td&gt;
+      &lt;td&gt;2017-02-27 14:58:40+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-28 15:38:28+00:00&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;closed_at&lt;/th&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;2020-04-23 19:40:10+00:00&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;2020-04-22 23:59:50+00:00&lt;/td&gt;
+      &lt;td&gt;2020-04-23 19:52:11+00:00&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:38:48+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:37:05+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:35:26+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-26 18:35:45+00:00&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;NaT&lt;/td&gt;
+      &lt;td&gt;2015-04-21 18:52:55+00:00&lt;/td&gt;
+      &lt;td&gt;2015-10-07 00:27:27+00:00&lt;/td&gt;
+      &lt;td&gt;2017-02-27 14:58:40+00:00&lt;/td&gt;
+      &lt;td&gt;2017-06-28 15:38:28+00:00&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;author_association&lt;/th&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;COLLABORATOR&lt;/td&gt;
+      &lt;td&gt;CONTRIBUTOR&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+      &lt;td&gt;MEMBER&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;pull_request&lt;/th&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;{'url': 'https://api.github.com/repos/ibis-pro...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;body&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;Currently condabuild ci job is failing because...&lt;/td&gt;
+      &lt;td&gt;Testing if splitting tests in this naive way s...&lt;/td&gt;
+      &lt;td&gt;xref #2181\r\n\r\nRunning `conda env create --...&lt;/td&gt;
+      &lt;td&gt;Arrow 0.16.0 builds in conda-forge were causin...&lt;/td&gt;
+      &lt;td&gt;Does anyone have access to the Ibis Twitter ac...&lt;/td&gt;
+      &lt;td&gt;This will fail the Linux builds, but if the Wi...&lt;/td&gt;
+      &lt;td&gt;Seems like the master builds have been failing...&lt;/td&gt;
+      &lt;td&gt;ibis.expr.rules does not contain a rule for tu...&lt;/td&gt;
+      &lt;td&gt;`\\d+` means string that has `\ddd...dd` as su...&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/bittor...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/bittor...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/bittor...&lt;/td&gt;
+      &lt;td&gt;&amp;lt;a href="http://github.mtv.cloudera.com/wesm"&amp;gt;...&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;23 rows × 2190 columns&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;pre&gt;&lt;code&gt;issues = λ.range(1,i).map(λ+get_issues+pandas.DataFrame)[pandas.concat]().set_index('id')
+times = λ(issues.columns) / λ.endswith('_at') + list + ...
+issues[times] = issues[times].apply(pandas.to_datetime)
+del times
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We accessed &lt;strong&gt;2190&lt;/strong&gt; from the ibis project.&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;Extract the &lt;code&gt;label_names&lt;/code&gt; from the &lt;code&gt;issues&lt;/code&gt;.&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;Label dummies&lt;/summary&gt;
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;id&lt;/th&gt;
+      &lt;th&gt;69922336&lt;/th&gt;
+      &lt;th&gt;69922344&lt;/th&gt;
+      &lt;th&gt;69922347&lt;/th&gt;
+      &lt;th&gt;69922355&lt;/th&gt;
+      &lt;th&gt;69922366&lt;/th&gt;
+      &lt;th&gt;69922370&lt;/th&gt;
+      &lt;th&gt;69922372&lt;/th&gt;
+      &lt;th&gt;69922378&lt;/th&gt;
+      &lt;th&gt;69922379&lt;/th&gt;
+      &lt;th&gt;69922384&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;594078317&lt;/th&gt;
+      &lt;th&gt;596089546&lt;/th&gt;
+      &lt;th&gt;596634656&lt;/th&gt;
+      &lt;th&gt;597615538&lt;/th&gt;
+      &lt;th&gt;598181367&lt;/th&gt;
+      &lt;th&gt;604931573&lt;/th&gt;
+      &lt;th&gt;605153217&lt;/th&gt;
+      &lt;th&gt;605156532&lt;/th&gt;
+      &lt;th&gt;605456457&lt;/th&gt;
+      &lt;th&gt;605865017&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;analytics&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;bigquery&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;bug&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;ci&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;clickhouse&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;community&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;compatibility&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;complexity-high&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;complexity-low&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;complexity-medium&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;coverage&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;ddl&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;developer-api&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;discussion&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;docker&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;documentation&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;duplicate&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;enhancement&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;etl&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;expressions&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;geospatial&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;good first issue&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;hdfs&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;help wanted&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;hive&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;impala&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;impala-udf&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;invalid&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;kudu&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;meeting&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;mysql&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;omnisci&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;packaging&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;pandas&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;parquet&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;performance&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;postgis&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;postgres&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;presto&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;pyspark&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;question&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;redshift&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;refactoring&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;security&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;spark&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;sql-support&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;sqlalchemy&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;sqlite&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;testing&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;usability&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;use-case&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;window functions&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;windows os&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;wontfix&lt;/th&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;54 rows × 1707 columns&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;pre&gt;&lt;code&gt;label_names = issues['labels'].apply(λ['pandas.Series']).stack().apply(λ['pandas.Series']).name
+label_names = label_names.pipe(λ['pandas.get_dummies']).pipe(lambda df: df.groupby(df.index.get_level_values(0)).sum())&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;Join the labels with the original dataframe and compose an annual analysis of the &lt;code&gt;backends&lt;/code&gt;.&lt;/p&gt;
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;omnisci&lt;/th&gt;
+      &lt;th&gt;spark&lt;/th&gt;
+      &lt;th&gt;postgres&lt;/th&gt;
+      &lt;th&gt;bigquery&lt;/th&gt;
+      &lt;th&gt;pandas&lt;/th&gt;
+      &lt;th&gt;sqlite&lt;/th&gt;
+      &lt;th&gt;impala&lt;/th&gt;
+      &lt;th&gt;kudu&lt;/th&gt;
+      &lt;th&gt;geospatial&lt;/th&gt;
+      &lt;th&gt;clickhouse&lt;/th&gt;
+      &lt;th&gt;mysql&lt;/th&gt;
+      &lt;th&gt;sqlalchemy&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;year&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2015&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;25&lt;/td&gt;
+      &lt;td&gt;52&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2016&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2017&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;21&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;49&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2018&lt;/th&gt;
+      &lt;td&gt;31&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;71&lt;/td&gt;
+      &lt;td&gt;35&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2019&lt;/th&gt;
+      &lt;td&gt;33&lt;/td&gt;
+      &lt;td&gt;22&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2020&lt;/th&gt;
+      &lt;td&gt;38&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;pre&gt;&lt;code&gt;issues_tags = label_names.join(issues).set_index('created_at').groupby(pandas.Grouper(freq='1Y')).sum()[backends.split()]
+issues_tags = issues_tags.set_index(pandas.Index(issues_tags.index.year, name='year'))
+issues_tags = issues_tags.replace({0:''})&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+
+&lt;pre&gt;&lt;code&gt;issues_tags.to_csv('annual_tags.csv')&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;/div&gt;&lt;/div&gt;</description><guid>https://quansight.github.io/ibis-posts/posts/scrape-issues/</guid><pubDate>Fri, 03 Apr 2020 16:23:13 GMT</pubDate></item><item><title>One syntax to rule all the backends</title><link>https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;div&gt;&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h2 id="ibis-a-pythonic-query-language."&gt;&lt;code&gt;ibis&lt;/code&gt; a pythonic query language.&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#ibis-a-pythonic-query-language."&gt;¶&lt;/a&gt;&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;import ibis.omniscidb, dask, intake, sqlalchemy, pandas, pyarrow as arrow, altair, h5py as hdf5
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!--    
+
+    import refs
+    reload(refs)
+    from refs import __doc__ as refs
+    over_time = pandas.read_csv('annual_tags.csv').set_index('year').fillna('')
+    __import__('warnings').simplefilter("ignore")
+
+--&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;p&gt;The design of &lt;code&gt;ibis&lt;/code&gt;, and other open source projects like &lt;code&gt;intake&lt;/code&gt; and &lt;code&gt;dask&lt;/code&gt;, begin with the pioneering 
+&lt;code&gt;"blaze"&lt;/code&gt; ecosystem provided interfaces to &lt;em&gt;&lt;strong&gt;store, describe, query, and process&lt;/strong&gt;&lt;/em&gt; data.
+"blaze" had ambitious goals and is now defunct, but its influences resonate throughout
+the scientific python community development.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;dask&lt;/code&gt; emerged directly from &lt;code&gt;"blaze"&lt;/code&gt;; meanwhile
+contributors can now be found working on projects like &lt;code&gt;ibis&lt;/code&gt; and &lt;code&gt;arrow&lt;/code&gt;. 
+&lt;a href="https://www.ibis-project.org/"&gt;&lt;code&gt;ibis&lt;/code&gt;&lt;/a&gt; took the role of providing a generic query language for data in python, that 
+is independent of the computation.&lt;/p&gt;
+&lt;p&gt;In this document we'll describe the different &lt;code&gt;ibis&lt;/code&gt; backend architectures and what it means to be independent of compute.&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h3 id="The-design-of-ibis-backends."&gt;The design of &lt;a href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/"&gt;&lt;code&gt;ibis&lt;/code&gt; backends&lt;/a&gt;.&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#The-design-of-ibis-backends."&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Currently, &lt;code&gt;ibis&lt;/code&gt; supports &lt;strong&gt;&amp;gt;10&lt;/strong&gt; backends.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; dir(ibis)
+[...HDFS...WebHDFS...bigquery...clickhouse...hdf5...impala...omniscidb...pandas...pyspark...spark...sql...sqlite...]
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A backend takes an &lt;code&gt;ibis&lt;/code&gt; query expression and applies computation, and the query is independent of the computation.
+A backend implementation, that can be queried with &lt;code&gt;ibis&lt;/code&gt;, has one of the three following architectures.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Direct execution backends - &lt;code&gt;pandas and hdf5&lt;/code&gt;. &lt;/li&gt;
+&lt;li&gt;Expression generating backends that create &lt;code&gt;sqlalchemy&lt;/code&gt; expressions.&lt;/li&gt;
+&lt;li&gt;String generating backends - &lt;code&gt;ibis.bigquery and ibis.omniscidb&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In the next few sections we'll unravel some of the different capiabilities of each approach.&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h3 id="A-data-driven-history-of-ibis-compatability."&gt;A data-driven history of &lt;code&gt;ibis&lt;/code&gt; compatability.&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#A-data-driven-history-of-ibis-compatability."&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The table below looks at over 2000 issues in the ibis project.
+It provides an annual looked at the issues tagged in &lt;code&gt;ibis&lt;/code&gt;
+for different backends over &lt;strong&gt;6&lt;/strong&gt; years.&lt;/p&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;omnisci&lt;/th&gt;
+      &lt;th&gt;spark&lt;/th&gt;
+      &lt;th&gt;postgres&lt;/th&gt;
+      &lt;th&gt;bigquery&lt;/th&gt;
+      &lt;th&gt;pandas&lt;/th&gt;
+      &lt;th&gt;sqlite&lt;/th&gt;
+      &lt;th&gt;impala&lt;/th&gt;
+      &lt;th&gt;kudu&lt;/th&gt;
+      &lt;th&gt;geospatial&lt;/th&gt;
+      &lt;th&gt;clickhouse&lt;/th&gt;
+      &lt;th&gt;mysql&lt;/th&gt;
+      &lt;th&gt;sqlalchemy&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;year&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2015&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;25&lt;/td&gt;
+      &lt;td&gt;52&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2016&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2017&lt;/th&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;21&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;49&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2018&lt;/th&gt;
+      &lt;td&gt;31&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;71&lt;/td&gt;
+      &lt;td&gt;35&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2019&lt;/th&gt;
+      &lt;td&gt;33&lt;/td&gt;
+      &lt;td&gt;22&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2020&lt;/th&gt;
+      &lt;td&gt;38&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;&lt;p&gt;We note an early focus &lt;code&gt;ibis.sqlite, sqlalchemy and ibis.impala&lt;/code&gt;. 
+Later, work began on the &lt;code&gt;pandas&lt;/code&gt; backend rounding out the three different types of backgrounds.
+From this point, improvements were made to these key backends as &lt;code&gt;ibis.clickhouse, ibis.spark and "postgres"&lt;/code&gt;. Recently, 
+For the past 3 years, Quansight, in partnership with OmniSci, added the &lt;code&gt;ibis.omniscidb&lt;/code&gt;
+string generating backend. Since Quansight Labs has taken on a role as a community maintainer 
+for &lt;code&gt;ibis&lt;/code&gt;. This collaboration introduced geospatial functionality to &lt;code&gt;ibis&lt;/code&gt;, and we 
+have on going efforts to introduce &lt;a href="https://github.com/ibis-project/ibis/pull/1997"&gt;SQL Server&lt;/a&gt; support&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;Currently, there is an ongoing effort to a . What backends what you like to
+see? &lt;code&gt;dask&lt;/code&gt;? &lt;code&gt;altair&lt;/code&gt;?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;blockquote&gt;&lt;p&gt;Learn more about working &lt;a href="https://github.com/ibis-project/ibis/pull/1991"&gt;Geospatial Data in &lt;code&gt;ibis&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h3 id="ibis-direct-execution."&gt;&lt;code&gt;ibis&lt;/code&gt; direct execution.&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#ibis-direct-execution."&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;&lt;code&gt;ibis&lt;/code&gt; direct execution backends like &lt;code&gt;pandas and hdf5&lt;/code&gt; operate on conventional in-memory python objects.
+&lt;code&gt;pandas&lt;/code&gt; is the gold standard for structured data in python, and inspires the api for &lt;code&gt;ibis&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pd = ibis.pandas.connect({'A': pandas.util.testing.makeDataFrame()})
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;pd&lt;/code&gt; is an &lt;code&gt;ibis&lt;/code&gt; backend based off &lt;code&gt;pandas.DataFrame&lt;/code&gt; objects.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;expression = pd.table('A').head()
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;expression&lt;/code&gt; is an &lt;code&gt;ibis&lt;/code&gt; query, that has &lt;code&gt;expression.compile&lt;/code&gt; and &lt;code&gt;expression.execute&lt;/code&gt; methods.
+We'll recognize the &lt;strong&gt;execute&lt;/strong&gt; method when we return &lt;code&gt;pandas.DataFrame&lt;/code&gt;s from &lt;code&gt;ibis&lt;/code&gt; expression.
+The &lt;strong&gt;compile&lt;/strong&gt; method does not trigger any computation, rather it constructs an intermediate form
+that is interpretted by a backend.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; assert isinstance(expression.compile(), ibis.expr.types.TableExpr)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In the case of direction execution backends, the &lt;code&gt;expression&lt;/code&gt; compiles to an the original &lt;code&gt;ibis&lt;/code&gt; 
+expression.  And the computation is carried out based on a set of recipes defined in &lt;code&gt;ibis&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;In general, we would typically do this work directly in &lt;code&gt;pandas&lt;/code&gt;, however this work is
+practical in mocking tests for expressions independent of backends.&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;Learn more about the &lt;a href="https://github.com/ibis-project/ibis/blob/master/ibis/file/tests/test_hdf5.py"&gt;HDF5 backend in the tests&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h3 id="ibis-expression-generating-backends."&gt;&lt;code&gt;ibis&lt;/code&gt; expression generating backends.&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#ibis-expression-generating-backends."&gt;¶&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;db = ibis.sqlite.connect('lahmansbaseballdb.sqlite')
+expression = db.table('halloffame').head()
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Expression generating backends operate on &lt;a href="https://en.wikipedia.org/wiki/SQL"&gt;SQL&lt;/a&gt; databases that interoperator with &lt;code&gt;sqlalchemy&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; assert isinstance(expression.compile(), sqlalchemy.sql.Select)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In the case of expression generating backends, the intermediate representation is a &lt;code&gt;sqlalchemy&lt;/code&gt; object.
+&lt;code&gt;sqlalchemy&lt;/code&gt; is &lt;em&gt;The Database Toolkit for Python&lt;/em&gt;, and &lt;code&gt;ibis&lt;/code&gt; leverages it compatability
+with traditional &lt;a href="https://en.wikipedia.org/wiki/SQL"&gt;SQL&lt;/a&gt; databases.&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h3 id="ibis-string-generating-backends."&gt;&lt;code&gt;ibis&lt;/code&gt; string generating backends.&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#ibis-string-generating-backends."&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install --upgrade ibis-framework&lt;span class="o"&gt;[&lt;/span&gt;omniscidb&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;String generating backends allow &lt;code&gt;ibis&lt;/code&gt; to interface with big data systems that manage 
+their own computation. For example, we may connect to an example &lt;code&gt;omnisci&lt;/code&gt; database.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;omnisci = ibis.omniscidb.connect(host='metis.omnisci.com', user='demouser', password='HyperInteractive', port=443, database='omnisci', protocol='https')
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;omnisci&lt;/code&gt; is described as a string generating backend because the intermediate representation of the
+query is a flavor of SQL.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;expression = omnisci.table('upstream_reservoir').head()
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A string generating expression compiles to &lt;code&gt;ibis.omniscidb&lt;/code&gt; flavored &lt;a href="https://en.wikipedia.org/wiki/SQL"&gt;SQL&lt;/a&gt;, while &lt;code&gt;ibis.bigquery&lt;/code&gt; may have a different string representatin.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; expression.compile()
+'SELECT *\nFROM upstream_reservoir\nLIMIT 5'
+
+
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;&lt;p&gt;Major credit goes to [@xmnlab] in his heroic PR to introduce &lt;code&gt;ibis.omniscidb&lt;/code&gt; into &lt;code&gt;ibis&lt;/code&gt;. You can watch
+the drama play out in this &lt;a href="https://github.com/ibis-project/ibis/pull/1419"&gt;Github Issue&lt;/a&gt;. If you'd like to learn more about &lt;a href="https://www.omnisci.com/"&gt;OmniSci&lt;/a&gt; and
+&lt;code&gt;ibis.omniscidb&lt;/code&gt; checkout the following links.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.omnisci.com/"&gt;OmniSci&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://labs.quansight.org/blog/2019/07/ibis-python-data-analysis-productivity-framework/"&gt;Quansight Labs- Ibis: Python data analysis productivity framework&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell rendered"&gt;
+
+&lt;div class="output_wrapper"&gt;
+&lt;div class="output"&gt;
+
+&lt;div class="output_area"&gt;
+
+
+&lt;div class="output_markdown rendered_html output_subarea "&gt;
+&lt;h3 id="Conclusion"&gt;Conclusion&lt;a class="anchor-link" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/#Conclusion"&gt;¶&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We'd like to thank the maintainers of the &lt;code&gt;ibis&lt;/code&gt; for
+their and effort in supporting the &lt;code&gt;ibis&lt;/code&gt; community.&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;&lt;/div&gt;</description><guid>https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/</guid><pubDate>Fri, 03 Apr 2020 16:23:13 GMT</pubDate></item><item><title>refs</title><link>https://quansight.github.io/ibis-posts/posts/refs/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;__doc__=\&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;</description><guid>https://quansight.github.io/ibis-posts/posts/refs/</guid><pubDate>Fri, 03 Apr 2020 16:23:13 GMT</pubDate></item><item><title>ibis - an idiomatic flavor of SQL for Python programmers.</title><link>https://quansight.github.io/ibis-posts/posts/ibis-an-idiomatic-flavor-of-sql-for-python-programmers/</link><dc:creator>Quansight Labs</dc:creator><description>&lt;div&gt;&lt;div class="cell border-box-sizing code_cell rendered"&gt;
 
 &lt;/div&gt;
 &lt;div class="cell border-box-sizing code_cell rendered"&gt;

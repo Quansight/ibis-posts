@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One syntax to rule all the backends | Ibis community posts sponsored by OmniSci</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Quansight Labs">
+<link rel="prev" href="../refs/" title="refs" type="text/html">
+<link rel="next" href="../scrape-issues/" title="Analysis of ibis issues." type="text/html">
+<meta property="og:site_name" content="Ibis community posts sponsored by OmniSci">
+<meta property="og:title" content="One syntax to rule all the backends">
+<meta property="og:url" content="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/">
+<meta property="og:description" content="ibis a pythonic query language.¶
+import ibis.omniscidb, dask, intake, sqlalchemy, pandas, pyarrow as arrow, altair, h5py as hdf5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The design of ibis, and other open source projects ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2020-04-03T12:23:13-04:00">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="https://quansight.github.io/ibis-posts/">
+            <img src="https://repository-images.githubusercontent.com/249788228/efe63800-726f-11ea-92e4-f79a6d92eac7" alt="Ibis community posts sponsored by OmniSci" id="logo" class="d-inline-block align-top"><span id="blog-title">Ibis community posts sponsored by OmniSci</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav">
+<li class="nav-item">
+    <a href="index.ipynb" id="sourcelink" class="nav-link">Source</a>
+    </li>
+
+
+                    
+            </ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">One syntax to rule all the backends</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Quansight Labs
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2020-04-03T12:23:13-04:00" itemprop="datePublished" title="2020-04-03 12:23">2020-04-03 12:23</time></a>
+            </p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/pythonic-queries-in-ibis.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.ipynb" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ibis-a-pythonic-query-language.">
+<code>ibis</code> a pythonic query language.<a class="anchor-link" href="#ibis-a-pythonic-query-language.">¶</a>
+</h2>
+<pre><code>import ibis.omniscidb, dask, intake, sqlalchemy, pandas, pyarrow as arrow, altair, h5py as hdf5
+
+</code></pre>
+<!--    
+
+    import refs
+    reload(refs)
+    from refs import __doc__ as refs
+    over_time = pandas.read_csv('annual_tags.csv').set_index('year').fillna('')
+    __import__('warnings').simplefilter("ignore")
+
+-->
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<p>The design of <code>ibis</code>, and other open source projects like <code>intake</code> and <code>dask</code>, begin with the pioneering 
+<code>"blaze"</code> ecosystem provided interfaces to <em><strong>store, describe, query, and process</strong></em> data.
+"blaze" had ambitious goals and is now defunct, but its influences resonate throughout
+the scientific python community development.</p>
+<p><code>dask</code> emerged directly from <code>"blaze"</code>; meanwhile
+contributors can now be found working on projects like <code>ibis</code> and <code>arrow</code>. 
+<a href="https://www.ibis-project.org/"><code>ibis</code></a> took the role of providing a generic query language for data in python, that 
+is independent of the computation.</p>
+<p>In this document we'll describe the different <code>ibis</code> backend architectures and what it means to be independent of compute.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="The-design-of-ibis-backends.">The design of <a href="."><code>ibis</code> backends</a>.<a class="anchor-link" href="#The-design-of-ibis-backends.">¶</a>
+</h3>
+<p>Currently, <code>ibis</code> supports <strong>&gt;10</strong> backends.</p>
+
+<pre><code>&gt;&gt;&gt; dir(ibis)
+[...HDFS...WebHDFS...bigquery...clickhouse...hdf5...impala...omniscidb...pandas...pyspark...spark...sql...sqlite...]
+
+</code></pre>
+<p>A backend takes an <code>ibis</code> query expression and applies computation, and the query is independent of the computation.
+A backend implementation, that can be queried with <code>ibis</code>, has one of the three following architectures.</p>
+<ol>
+<li>Direct execution backends - <code>pandas and hdf5</code>. </li>
+<li>Expression generating backends that create <code>sqlalchemy</code> expressions.</li>
+<li>String generating backends - <code>ibis.bigquery and ibis.omniscidb</code>
+</li>
+</ol>
+<p>In the next few sections we'll unravel some of the different capiabilities of each approach.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="A-data-driven-history-of-ibis-compatability.">A data-driven history of <code>ibis</code> compatability.<a class="anchor-link" href="#A-data-driven-history-of-ibis-compatability.">¶</a>
+</h3>
+<p>The table below looks at over 2000 issues in the ibis project.
+It provides an annual looked at the issues tagged in <code>ibis</code>
+for different backends over <strong>6</strong> years.</p>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+      <th>omnisci</th>
+      <th>spark</th>
+      <th>postgres</th>
+      <th>bigquery</th>
+      <th>pandas</th>
+      <th>sqlite</th>
+      <th>impala</th>
+      <th>kudu</th>
+      <th>geospatial</th>
+      <th>clickhouse</th>
+      <th>mysql</th>
+      <th>sqlalchemy</th>
+    </tr>
+<tr>
+<th>year</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+<th>2015</th>
+      <td></td>
+      <td></td>
+      <td>2</td>
+      <td></td>
+      <td>2</td>
+      <td>25</td>
+      <td>52</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>17</td>
+    </tr>
+<tr>
+<th>2016</th>
+      <td></td>
+      <td></td>
+      <td>3</td>
+      <td></td>
+      <td></td>
+      <td>2</td>
+      <td>4</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>3</td>
+    </tr>
+<tr>
+<th>2017</th>
+      <td></td>
+      <td>1</td>
+      <td>21</td>
+      <td>15</td>
+      <td>49</td>
+      <td>10</td>
+      <td>15</td>
+      <td></td>
+      <td></td>
+      <td>8</td>
+      <td></td>
+      <td>10</td>
+    </tr>
+<tr>
+<th>2018</th>
+      <td>31</td>
+      <td></td>
+      <td>10</td>
+      <td>71</td>
+      <td>35</td>
+      <td>8</td>
+      <td>17</td>
+      <td></td>
+      <td></td>
+      <td>9</td>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+<tr>
+<th>2019</th>
+      <td>33</td>
+      <td>22</td>
+      <td>17</td>
+      <td>12</td>
+      <td>32</td>
+      <td>1</td>
+      <td>4</td>
+      <td></td>
+      <td>7</td>
+      <td>1</td>
+      <td>2</td>
+      <td>5</td>
+    </tr>
+<tr>
+<th>2020</th>
+      <td>38</td>
+      <td>3</td>
+      <td>4</td>
+      <td>2</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td></td>
+    </tr>
+</tbody>
+</table>
+<p>We note an early focus <code>ibis.sqlite, sqlalchemy and ibis.impala</code>. 
+Later, work began on the <code>pandas</code> backend rounding out the three different types of backgrounds.
+From this point, improvements were made to these key backends as <code>ibis.clickhouse, ibis.spark and "postgres"</code>. Recently, 
+For the past 3 years, Quansight, in partnership with OmniSci, added the <code>ibis.omniscidb</code>
+string generating backend. Since Quansight Labs has taken on a role as a community maintainer 
+for <code>ibis</code>. This collaboration introduced geospatial functionality to <code>ibis</code>, and we 
+have on going efforts to introduce <a href="https://github.com/ibis-project/ibis/pull/1997">SQL Server</a> support</p>
+<blockquote>
+<p>Currently, there is an ongoing effort to a . What backends what you like to
+see? <code>dask</code>? <code>altair</code>?</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<blockquote>
+<p>Learn more about working <a href="https://github.com/ibis-project/ibis/pull/1991">Geospatial Data in <code>ibis</code></a>.</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="ibis-direct-execution.">
+<code>ibis</code> direct execution.<a class="anchor-link" href="#ibis-direct-execution.">¶</a>
+</h3>
+<p><code>ibis</code> direct execution backends like <code>pandas and hdf5</code> operate on conventional in-memory python objects.
+<code>pandas</code> is the gold standard for structured data in python, and inspires the api for <code>ibis</code>.</p>
+
+<pre><code>pd = ibis.pandas.connect({'A': pandas.util.testing.makeDataFrame()})
+
+</code></pre>
+<p><code>pd</code> is an <code>ibis</code> backend based off <code>pandas.DataFrame</code> objects.</p>
+
+<pre><code>expression = pd.table('A').head()
+
+</code></pre>
+<p><code>expression</code> is an <code>ibis</code> query, that has <code>expression.compile</code> and <code>expression.execute</code> methods.
+We'll recognize the <strong>execute</strong> method when we return <code>pandas.DataFrame</code>s from <code>ibis</code> expression.
+The <strong>compile</strong> method does not trigger any computation, rather it constructs an intermediate form
+that is interpretted by a backend.</p>
+
+<pre><code>&gt;&gt;&gt; assert isinstance(expression.compile(), ibis.expr.types.TableExpr)
+
+</code></pre>
+<p>In the case of direction execution backends, the <code>expression</code> compiles to an the original <code>ibis</code> 
+expression.  And the computation is carried out based on a set of recipes defined in <code>ibis</code>.</p>
+<p>In general, we would typically do this work directly in <code>pandas</code>, however this work is
+practical in mocking tests for expressions independent of backends.</p>
+<blockquote>
+<p>Learn more about the <a href="https://github.com/ibis-project/ibis/blob/master/ibis/file/tests/test_hdf5.py">HDF5 backend in the tests</a>.</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="ibis-expression-generating-backends.">
+<code>ibis</code> expression generating backends.<a class="anchor-link" href="#ibis-expression-generating-backends.">¶</a>
+</h3>
+<pre><code>db = ibis.sqlite.connect('lahmansbaseballdb.sqlite')
+expression = db.table('halloffame').head()
+
+</code></pre>
+<p>Expression generating backends operate on <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> databases that interoperator with <code>sqlalchemy</code>.</p>
+
+<pre><code>&gt;&gt;&gt; assert isinstance(expression.compile(), sqlalchemy.sql.Select)
+
+</code></pre>
+<p>In the case of expression generating backends, the intermediate representation is a <code>sqlalchemy</code> object.
+<code>sqlalchemy</code> is <em>The Database Toolkit for Python</em>, and <code>ibis</code> leverages it compatability
+with traditional <a href="https://en.wikipedia.org/wiki/SQL">SQL</a> databases.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="ibis-string-generating-backends.">
+<code>ibis</code> string generating backends.<a class="anchor-link" href="#ibis-string-generating-backends.">¶</a>
+</h3>
+<div class="highlight"><pre><span></span>pip install --upgrade ibis-framework<span class="o">[</span>omniscidb<span class="o">]</span>
+</pre></div>
+<p>String generating backends allow <code>ibis</code> to interface with big data systems that manage 
+their own computation. For example, we may connect to an example <code>omnisci</code> database.</p>
+
+<pre><code>omnisci = ibis.omniscidb.connect(host='metis.omnisci.com', user='demouser', password='HyperInteractive', port=443, database='omnisci', protocol='https')
+
+</code></pre>
+<p><code>omnisci</code> is described as a string generating backend because the intermediate representation of the
+query is a flavor of SQL.</p>
+
+<pre><code>expression = omnisci.table('upstream_reservoir').head()
+
+</code></pre>
+<p>A string generating expression compiles to <code>ibis.omniscidb</code> flavored <a href="https://en.wikipedia.org/wiki/SQL">SQL</a>, while <code>ibis.bigquery</code> may have a different string representatin.</p>
+
+<pre><code>&gt;&gt;&gt; expression.compile()
+'SELECT *\nFROM upstream_reservoir\nLIMIT 5'
+
+
+
+</code></pre>
+<blockquote>
+<p>Major credit goes to [@xmnlab] in his heroic PR to introduce <code>ibis.omniscidb</code> into <code>ibis</code>. You can watch
+the drama play out in this <a href="https://github.com/ibis-project/ibis/pull/1419">Github Issue</a>. If you'd like to learn more about <a href="https://www.omnisci.com/">OmniSci</a> and
+<code>ibis.omniscidb</code> checkout the following links.</p>
+<ul>
+<li><a href="https://www.omnisci.com/">OmniSci</a></li>
+<li><a href="https://labs.quansight.org/blog/2019/07/ibis-python-data-analysis-productivity-framework/">Quansight Labs- Ibis: Python data analysis productivity framework</a></li>
+</ul>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h3 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a>
+</h3>
+<p>We'd like to thank the maintainers of the <code>ibis</code> for
+their and effort in supporting the <code>ibis</code> community.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul class="pager hidden-print">
+<li class="previous">
+                <a href="../refs/" rel="prev" title="refs">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../scrape-issues/" rel="next" title="Analysis of ibis issues.">Next post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="tonyfast",
+            disqus_url="https://quansight.github.io/ibis-posts/posts/one-syntax-to-rule-all-the-backends/",
+        disqus_title="One syntax to rule all the backends",
+        disqus_identifier="cache/posts/pythonic-queries-in-ibis.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+        </script></article><script>var disqus_shortname="tonyfast";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><!--End of body content--><footer id="footer">
+            Contents © 2020         <a href="mailto:labs@quansight.com">Quansight Labs</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
