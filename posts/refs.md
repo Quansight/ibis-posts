@@ -1,3 +1,6 @@
+---
+date: 2020-04-03 12:23:13 UTC-04:00
+---
 [ibis]: https://www.ibis-project.org/
 [SQL]: https://en.wikipedia.org/wiki/SQL
 [Python]: https://en.wikipedia.org/wiki/Python_(programming_language)
@@ -27,4 +30,5 @@
 [geo-tutorial]: https://github.com/ibis-project/ibis/pull/1991
 [geo-closed]: https://github.com/ibis-project/ibis/issues?q=label%3Ageospatial+is%3Aclosed
 [sql-server]: https://github.com/ibis-project/ibis/pull/1997
-[omnisci-pr]: https://github.com/ibis-project/ibis/pull/1997
+[omnisci-pr]: https://github.com/ibis-project/ibis/pull/1419
+[test-hdf5]: https://github.com/ibis-project/ibis/blob/master/ibis/file/tests/test_hdf5.py
